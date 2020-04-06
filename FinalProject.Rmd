@@ -1,0 +1,33 @@
+---
+title: "Final Project"
+author: "Pranav Keshav and Hojin Ryoo"
+date: "4-5-2020"
+output: 
+    html_notebook:
+    fig_height: 6
+    fig_width: 10
+---
+
+## Guiding Question
+
+Are there general trends in regards to pokemon stats and the correlation to what type they may be?
+
+
+## Data Sources
+
+We found this dataset online. 
+
+This dataset was created and is maintained by user eevee and some other contributors. This was collected in order to collect data from all different Pokemon games in order to see trends and make observations from the dataset. 
+
+There are 965 cases in which the case is represented by the Pokemon name and then some data about it such as height, weight and base experience.
+
+We plan to use the base experience and relate it to the different types of Pokemon.
+
+
+## Research
+
+
+## Sources
+
+Our primary source is https://github.com/Akolyte/STAT-184-Final-Project/blob/master/pokemon.csv. There are other files that we may use that have different statistics, so we can join the datasets then if needed.
+Another source that we are using is an API that has data regarding the different Pokemon games to see if we can make trends relate to specific games or times when they were released. This is found on www.pokeapi.co.
