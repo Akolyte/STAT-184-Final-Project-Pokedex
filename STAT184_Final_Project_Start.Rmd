@@ -141,7 +141,7 @@ master %>%
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
-# As you can see from the chart, Fighting types have the best attack on average across types. 
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ## Sources
