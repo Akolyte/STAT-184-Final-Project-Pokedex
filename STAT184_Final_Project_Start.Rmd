@@ -15,13 +15,19 @@ Are there general trends in regards to pokemon stats and the correlation to what
 
 ## Data Sources
 
-We found this dataset online. 
+Where: We found this dataset online. 
 
-This dataset was created and is maintained by user eevee and some other contributors. This was collected in order to collect data from all different Pokemon games in order to see trends and make observations from the dataset. 
+Who/When and Why: This dataset was created and is maintained by user eevee and some other contributors. This was collected in order to collect data from all different Pokemon games in order to see trends and make observations from the dataset. 
 
-There are 965 cases in which the case is represented by the Pokemon name and then some data about it such as height, weight and base experience.
+What: There are 964 cases in which the case is represented by the Pokemon name and then some data about it such as height, weight and base experience.
 
-We plan to use the base experience and relate it to the different types of Pokemon.
+```{r}
+pk_names %>%
+  summarise(total_cases = n())
+```
+
+
+We plan to use the base stats of each Pokemon and relate it to the different types of Pokemon.
 
 
 ## Research
