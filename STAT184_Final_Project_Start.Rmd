@@ -10,7 +10,7 @@ output:
 
 ## Guiding Question
 
-Are there general trends in regards to pokemon stats and the correlation to what type they may be?
+Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
 
 
 ## Data Sources
