@@ -13,7 +13,7 @@ output:
 Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
 
 
-## Data Sources
+## Data Access
 
 Where: We found this dataset online. 
 
@@ -26,12 +26,6 @@ pk_names %>%
   summarise(total_cases = n())
 ```
 
-
-We plan to use the base stats of each Pokemon and relate it to the different types of Pokemon.
-
-
-## Research
-
 ```{r}
 library(DataComputing)
 library(tidyverse)
@@ -39,7 +33,7 @@ library(tidyverse)
 
 
 ```{r}
-#Loading in all the necessary data
+#At least two data sources are imported
 
 pk_stats <- read_csv(file = "pokemon_stats.csv")
 pk_types <- read_csv(file = "pokemon_types.csv")
@@ -52,6 +46,8 @@ pk_names
 stat_names
 type_names
 ```
+
+# Data Wrangling
 
 ```{r}
 # Getting English type names
@@ -112,6 +108,12 @@ pk_stats_f %>%
 pk_types_f %>%
   str()
 ```
+
+## Data Visualization
+
+### Guiding Question
+
+Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
 
 ```{r}
 # We can displaying the difference in stats for an individual pokemon
