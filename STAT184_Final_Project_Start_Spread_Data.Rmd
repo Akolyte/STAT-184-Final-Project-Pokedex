@@ -1,0 +1,203 @@
+---
+title: "Final Project"
+author: "Pranav Keshav and Hojin Ryoo"
+date: "4-5-2020"
+output: 
+    html_notebook:
+    fig_height: 6
+    fig_width: 10
+---
+
+## Guiding Question
+
+Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
+
+
+## Data Access
+
+Where: We found this dataset online. 
+
+Who/When and Why: This dataset was created and is maintained by user eevee and some other contributors. This was collected in order to collect data from all different Pokemon games in order to see trends and make observations from the dataset. 
+
+What: There are 964 cases in which the case is represented by the Pokemon name and then some data about it such as height, weight and base experience.
+
+```{r}
+library(DataComputing)
+library(tidyverse)
+```
+
+```{r}
+pk_names %>%
+  summarise(total_cases = n())
+```
+
+```{r}
+#At least two data sources are imported
+
+pk_stats <- read_csv(file = "pokemon_stats.csv")
+pk_types <- read_csv(file = "pokemon_types.csv")
+pk_names_extra <- read_csv(file = "pokemon.csv")
+stat_names <- read_csv(file = "stat_names.csv")
+type_names <- read_csv(file = "type_names.csv")
+pk_stats
+pk_types
+pk_names
+stat_names
+type_names
+```
+
+# Data Wrangling
+
+```{r}
+# Getting English type names
+type_names <-
+  type_names %>%
+  filter(local_language_id == 9)
+type_names
+```
+
+```{r}
+# Getting English Stat Names
+stat_names <-
+  stat_names %>%
+  filter(local_language_id == 9)
+stat_names
+```
+
+```{r}
+# Selecting the rows needed from the pokemon_names_extra var
+pk_names <-
+  pk_names_extra %>%
+  select(species_id, identifier)
+pk_names
+```
+
+```{r}
+#Creating correct info
+
+pk_stats_f <-
+  pk_stats %>%
+  left_join(y = pk_names, by = c("pokemon_id" = "species_id")) %>%
+  select(identifier, stat_id, base_stat) %>%
+  left_join(y = stat_names) %>%
+  select(identifier, name, base_stat) %>%
+  rename(stat = name, 
+         name = identifier)
+pk_stats_f
+```
+
+```{r}
+#Creating id column
+pk_stats_f$id = NA
+
+pk_stats_f
+```
+
+```{r}
+#Creating values for id column
+for (row in 1:nrow(pk_stats_f)) 
+{
+  pk_stats_f$id[[row]] <- row
+}
+
+pk_stats_f
+```
+
+```{r}
+for (row in 1:nrow(pk_stats_f))
+{
+  if (pk_stats_f$stat[[row]] == "Special Attack")
+  {
+    pk_stats_f$stat[[row]] <- "Special_Attack"
+  }
+  if (pk_stats_f$stat[[row]] == "Special Defense")
+  {
+    pk_stats_f$stat[[row]] <- "Special_Defense"
+  }
+}
+
+pk_stats_f
+```
+
+
+```{r}
+unclean <-
+  pk_stats_f %>%
+  spread(key = stat, value = base_stat)
+pk_stats_f <-
+  unclean %>%
+  group_by(name) %>%
+  summarise(HP = sum(HP, na.rm = TRUE), 
+            Attack = sum(Attack, na.rm = TRUE),
+            Defense = sum(Defense, na.rm = TRUE) ,
+            Special_Attack = sum(Special_Attack, na.rm = TRUE),
+            Special_Defense = sum(Special_Defense, na.rm = TRUE),
+            Speed = sum(Speed, na.rm = TRUE))
+pk_stats_f
+```
+
+```{r}
+pk_types_f <-
+  pk_types %>%
+  left_join(y=pk_names, by = c("pokemon_id" = "species_id")) %>%
+  select(identifier, type_id, slot) %>%
+  left_join(y = type_names) %>%
+  select(identifier, name, slot) %>%
+  rename(name = identifier, 
+         type = name)
+pk_types_f
+```
+
+```{r}
+pk_stats_f %>%
+  str()
+```
+
+```{r}
+pk_types_f %>%
+  str()
+```
+
+## Data Visualization
+
+### Guiding Question
+
+Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
+
+```{r}
+# We can filter pokemon by type
+pk_types_f %>%
+  filter(type == "Fire" & slot == 1)
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f) %>%
+  select(name, type, slot, HP, Attack, Defense, Special_Attack, Special_Defense, Speed)
+master
+```
+
+```{r}
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(slot == 1) %>%
+  group_by(type) %>%
+  summarise(avg_attack = median(Attack)) %>%
+  ggplot(aes(x = type, y = avg_attack)) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+```
+  ggplot(aes(x = type, y = avg_attack)) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+## Sources
+
+Our primary source is https://github.com/Akolyte/STAT-184-Final-Project/blob/master/pokemon.csv. There are other files that we may use that have different statistics, so we can join the datasets then if needed.
+Another source that we are using is an API that has data regarding the different Pokemon games to see if we can make trends relate to specific games or times when they were released. This is found on www.pokeapi.co.
