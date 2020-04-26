@@ -21,16 +21,17 @@ Who/When and Why: This dataset was created and is maintained by user eevee and s
 
 What: There are 964 cases in which the case is represented by the Pokemon name and then some data about it such as height, weight and base experience.
 
-```{r}
-pk_names %>%
-  summarise(total_cases = n())
-```
+
 
 ```{r}
 library(DataComputing)
 library(tidyverse)
 ```
 
+```{r}
+pk_names %>%
+  summarise(total_cases = n())
+```
 
 ```{r}
 #At least two data sources are imported
@@ -143,6 +144,101 @@ master <-
 
 master %>%
   filter(stat == "Attack") %>%
+  group_by(type) %>%
+  summarise(avg_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f)
+
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "HP") %>%
+  group_by(type) %>%
+  summarise(avg_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f)
+
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "Defense") %>%
+  group_by(type) %>%
+  summarise(avg_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f)
+
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "Special Attack") %>%
+  group_by(type) %>%
+  summarise(avg_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f)
+
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "Special Defense") %>%
+  group_by(type) %>%
+  summarise(avg_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+```{r}
+# Creating the master data
+master <-
+  pk_stats_f %>%
+  left_join(pk_types_f)
+
+# Example of Research Question: How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "Speed") %>%
   group_by(type) %>%
   summarise(avg_attack = mean(base_stat)) %>%
   ggplot(aes(x = type, y = exp(avg_attack))) + 
