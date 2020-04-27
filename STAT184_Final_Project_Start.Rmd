@@ -1,6 +1,6 @@
 ---
 title: "Final Project"
-author: "Pranav Keshav and Hojin Ryoo"
+author: "Pranav Keshav, Abhishek Aryaman, and Hojin Ryoo"
 date: "4-5-2020"
 output: 
     html_notebook:
@@ -29,11 +29,6 @@ library(tidyverse)
 ```
 
 ```{r}
-pk_names %>%
-  summarise(total_cases = n())
-```
-
-```{r}
 #At least two data sources are imported
 
 pk_stats <- read_csv(file = "pokemon_stats.csv")
@@ -43,7 +38,6 @@ stat_names <- read_csv(file = "stat_names.csv")
 type_names <- read_csv(file = "type_names.csv")
 pk_stats
 pk_types
-pk_names
 stat_names
 type_names
 ```
@@ -138,34 +132,36 @@ pk_types_f %>%
 # Creating the master data
 master <-
   pk_stats_f %>%
-  left_join(pk_types_f)
-
-# Example of Research Question: How do the average attack stats compare across types?
-
-master %>%
-  filter(stat == "Attack") %>%
-  group_by(type) %>%
-  summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
-  geom_col() + 
-  theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+  left_join(pk_types_f) %>%
+  filter(name != "NA")
+master
 ```
 
-```{r}
-# Creating the master data
-master <-
-  pk_stats_f %>%
-  left_join(pk_types_f)
 
+
+```{r}
 # Example of Research Question: How do the average attack stats compare across types?
 
 master %>%
   filter(stat == "HP") %>%
   group_by(type) %>%
+  summarise(avg_hp = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = exp(avg_hp))) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+
+# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
+```
+
+
+```{r}
+# How do the average attack stats compare across types?
+
+master %>%
+  filter(stat == "Attack") %>%
+  group_by(type) %>%
   summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  ggplot(aes(x = type, y = avg_attack)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
@@ -173,18 +169,22 @@ master %>%
 ```
 
 ```{r}
-# Creating the master data
-master <-
-  pk_stats_f %>%
-  left_join(pk_types_f)
+# Inspecting Fighting type Attack distribution
+fighting <-
+  master %>%
+  filter(stat=="Attack" & type =="Fighting")
+fighting
+```
 
+
+```{r}
 # Example of Research Question: How do the average attack stats compare across types?
 
 master %>%
   filter(stat == "Defense") %>%
   group_by(type) %>%
-  summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  summarise(avg_defense = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = avg_defense)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
@@ -192,18 +192,13 @@ master %>%
 ```
 
 ```{r}
-# Creating the master data
-master <-
-  pk_stats_f %>%
-  left_join(pk_types_f)
-
 # Example of Research Question: How do the average attack stats compare across types?
 
 master %>%
   filter(stat == "Special Attack") %>%
   group_by(type) %>%
-  summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  summarise(avg_special_attack = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = avg_special_attack)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
@@ -211,18 +206,13 @@ master %>%
 ```
 
 ```{r}
-# Creating the master data
-master <-
-  pk_stats_f %>%
-  left_join(pk_types_f)
-
 # Example of Research Question: How do the average attack stats compare across types?
 
 master %>%
   filter(stat == "Special Defense") %>%
   group_by(type) %>%
-  summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  summarise(avg_special_defense = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = avg_special_defense)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
@@ -230,18 +220,13 @@ master %>%
 ```
 
 ```{r}
-# Creating the master data
-master <-
-  pk_stats_f %>%
-  left_join(pk_types_f)
-
 # Example of Research Question: How do the average attack stats compare across types?
 
 master %>%
   filter(stat == "Speed") %>%
   group_by(type) %>%
-  summarise(avg_attack = mean(base_stat)) %>%
-  ggplot(aes(x = type, y = exp(avg_attack))) + 
+  summarise(avg_speed = mean(base_stat)) %>%
+  ggplot(aes(x = type, y = avg_speed)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
 
