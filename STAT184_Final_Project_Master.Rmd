@@ -105,6 +105,88 @@ pk_types_f %>%
   str()
 ```
 
+```{r}
+#Creating correct info
+
+pk_stats_z <-
+  pk_stats %>%
+  left_join(y = pk_names, by = c("pokemon_id" = "species_id")) %>%
+  select(identifier, stat_id, base_stat) %>%
+  left_join(y = stat_names) %>%
+  select(identifier, name, base_stat) %>%
+  rename(stat = name, 
+         name = identifier)
+pk_stats_z
+```
+
+```{r}
+#Creating id column
+pk_stats_z$id = NA
+
+pk_stats_z
+```
+
+```{r}
+#Creating values for id column
+for (row in 1:nrow(pk_stats_z)) 
+{
+  pk_stats_z$id[[row]] <- row
+}
+
+pk_stats_z
+```
+
+```{r}
+for (row in 1:nrow(pk_stats_f))
+{
+  if (pk_stats_z$stat[[row]] == "Special Attack")
+  {
+    pk_stats_z$stat[[row]] <- "Special_Attack"
+  }
+  if (pk_stats_z$stat[[row]] == "Special Defense")
+  {
+    pk_stats_z$stat[[row]] <- "Special_Defense"
+  }
+}
+
+pk_stats_z
+```
+
+
+```{r}
+unclean <-
+  pk_stats_z %>%
+  spread(key = stat, value = base_stat)
+pk_stats_z <-
+  unclean %>%
+  group_by(name) %>%
+  summarise(HP = sum(HP, na.rm = TRUE), 
+            Attack = sum(Attack, na.rm = TRUE),
+            Defense = sum(Defense, na.rm = TRUE) ,
+            Special_Attack = sum(Special_Attack, na.rm = TRUE),
+            Special_Defense = sum(Special_Defense, na.rm = TRUE),
+            Speed = sum(Speed, na.rm = TRUE))
+pk_stats_z
+```
+
+```{r}
+# Creating the master2 data
+master2 <-
+  pk_stats_z %>%
+  left_join(pk_types_f) %>%
+  select(name, type, slot, HP, Attack, Defense, Special_Attack, Special_Defense, Speed)
+master2
+```
+
+```{r}
+master2 %>%
+  group_by(name, type) %>%
+  summarise(total = sum(HP, Attack, Defense, Special_Attack, Special_Defense, Speed)) %>%
+  group_by(type) %>%
+  summarise(average_stat_total = median(total))
+```
+
+
 ## Data Visualization
 
 ### Guiding Question
