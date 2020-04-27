@@ -179,37 +179,18 @@ master2
 ```
 
 ```{r}
+# Calculating Stat Totals
+stat_total <-
 master2 %>%
   group_by(name, type) %>%
   summarise(total = sum(HP, Attack, Defense, Special_Attack, Special_Defense, Speed)) %>%
   group_by(type) %>%
   summarise(average_stat_total = median(total))
+stat_total
 ```
 
 
-## Data Visualization
-
-### Guiding Question
-
-Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
-
-```{r}
-# We can displaying the difference in stats for an individual pokemon
-
-pk_stats_f %>%
-  filter(name == "bulbasaur") %>%
-  ggplot(aes(stat, base_stat)) + 
-  geom_col() + 
-  ggtitle("Bulbasaur's Stats") + 
-  ylab("Stat Value") + 
-  xlab("Stat Name")
-```
-
-```{r}
-# We can filter pokemon by type
-pk_types_f %>%
-  filter(type == "Fire" & slot == 1)
-```
+## Data Visualization Code
 
 ```{r}
 # Creating the master data
@@ -220,12 +201,11 @@ master <-
 master
 ```
 
-
-
 ```{r}
 # Example of Research Question: How do the average attack stats compare across types?
 
-master %>%
+hp <-
+  master %>%
   filter(stat == "HP") %>%
   group_by(type, slot) %>%
   summarise(avg_hp = mean(base_stat)) %>%
@@ -236,10 +216,9 @@ master %>%
 # As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
-
 ```{r}
-# How do the average attack stats compare across types?
-
+# Attack
+att <-
 master %>%
   filter(stat == "Attack") %>%
   group_by(type, slot) %>%
@@ -252,20 +231,9 @@ master %>%
 ```
 
 ```{r}
-# Inspecting Fighting type Attack distribution
-fighting <-
+#Defense
+def <-
   master %>%
-  filter(stat=="Attack" & type =="Fighting") %>%
-  ggplot(aes(x = reorder(name, base_stat), y = base_stat, color = slot)) + 
-  geom_point()
-fighting
-```
-
-
-```{r}
-# Example of Research Question: How do the average attack stats compare across types?
-
-master %>%
   filter(stat == "Defense") %>%
   group_by(type, slot) %>%
   summarise(avg_defense = mean(base_stat)) %>%
@@ -278,8 +246,8 @@ master %>%
 
 ```{r}
 # Example of Research Question: How do the average attack stats compare across types?
-
-master %>%
+spa <-
+  master %>%
   filter(stat == "Special Attack") %>%
   group_by(type, slot) %>%
   summarise(avg_special_attack = mean(base_stat)) %>%
@@ -292,8 +260,8 @@ master %>%
 
 ```{r}
 # Example of Research Question: How do the average attack stats compare across types?
-
-master %>%
+spd <-
+  master %>%
   filter(stat == "Special Defense") %>%
   group_by(type, slot) %>%
   summarise(avg_special_defense = mean(base_stat)) %>%
@@ -306,8 +274,8 @@ master %>%
 
 ```{r}
 # Example of Research Question: How do the average attack stats compare across types?
-
-master %>%
+spe <-
+  master %>%
   filter(stat == "Speed") %>%
   group_by(type, slot) %>%
   summarise(avg_speed = mean(base_stat)) %>%
@@ -317,6 +285,210 @@ master %>%
 
 # As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
+
+```{r}
+st <-
+  stat_total %>%
+  ggplot(aes(x = type, y = average_stat_total)) + 
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+```
+
+
+# Narrative
+
+## Guiding Question
+
+Are there any correlations between a pokemon's stats and type? Do these correlations make sense in the context of the type? 
+
+Being huge Pokemon fans, I think it was no surprise that we chose to work on this dataset. The underlying question that has haunted millions of kids throughout is whether the Pokemon’s stats (Attack, Defense, Special Attack & Special Defense) and their type have some sort of correlation & also to understand the strongest & weakest Pokemon types. 
+
+Through this project we hope to show that logical assertions about type transitions to stats. For example, Fighting types would have high attack stats on average because the word fighting implies physical attacks. Electric types would have high speed stats on average because the word implies quickness, etc.
+
+## Why this Project? & Technical Challenges
+
+This topic has been super fun to work with, I think there has been a certain sense of nostalgia that we as pokemon fans have felt and also bonded more as geeky college kids with a love for data and pokemon alike.  The problem has been challenging technically as well, especially work with such a large dataset, cleaning it, and analyzing the trends.  The dataset had a plethora of cases, each representing different pokemon which is what we used to wrangle the data & use that to draw some conclusions.  
+
+We faced several technical challenges, one being that we wanted to spread out data in such a way that would make our dataset wider. Originally when we ran queries to do this everything appeared to work but there was one error that we received. Since we did not have a unique column the spread function would not run. After we spent time figuring this out, we decided that we should create a new column that would have a primary key. This way it would be the unique identifier that allows the spread to work. We did this by using for loops to relabel the ID column, and then another for loop to fix the names of the stats so that there were no spaces. This way we could use them as column names for the spread() function. 
+
+By using resources online we added this column to the entire dataset and then ran the code chunk. After this change, it actually worked and we were successfully able to wrangle the data using a spread command and make the dataset more clear and readable for any viewers. After we completed the data visualizations, we tried to come up with reasons to explain our findings and we had a couple of brainstorming sessions to explain why certain stats were lower or higher for some Pokemon. This process was fun and we were able to theorize and justify a lot of the types and their stats. 
+
+# Conclusions
+
+Some of the conclusions that we made can be observed below. We isolated attack stats and observed which types of Pokemon seem to have the higher attack stats. In addition we also observed the health and defense stats as these are all crucial to the game. By collecting this data we were then able to justify and see if these trends we saw seemed to make sense based on the game that we know.
+
+## HP
+
+```{r}
+hp
+```
+
+
+Normal, Ice & Dragon were amongst the highest HP Pokemon while Bug, Poison & Grass were the Pokemon who had lower HPs comparatively. 
+
+Justifications
+
+### Stronger: 
+
+Normal: A theory they came up with is that these pokemon are weaker so it could be possible that as a defense mechanism they developed high HP to help them sustain themselves in battle if they ever needed to. 
+
+Ice: Pokemon has a poetic sense of writing like Ice could signify preservation and the fact that these Pokemon have higher HP could be that they are more preserved than others.
+
+Dragon: As mentioned above, dragons are always mythically depicted in a way to symbolize strength and shown to be aggressive so it sets in an inherent bias that we statistically confirmed when we see that dragon-type pokemon are indeed amongst the Pokemon with higher HPs. 
+
+### Weaker: 
+
+Bug: Bugs are also depicted as lower creatures and can symbolize weakness, which is evident by many saying such “Squashed like a bug.”  It was seen evidently consistent with the Pokemon type bug and how weak they were with respect to their attack and also HP. 
+Grass & Poison: We are beginning to explore the possibility that Poison & Grass type pokemon could also show similar trends to Bug-type Pokemon. 
+
+
+## Attack
+
+```{r}
+att
+```
+
+
+We tried to sort out the different types of pokemon by their respective attacks and we saw that Dark, Dragon & Fighting types had the highest attack stats and on the other hand Normal, Poison, Bug & Water had the lowest attack stats. 
+
+Justifications
+
+Stronger: 
+
+Dragon: Dragons are always mythically depicted in a way to symbolize strength and shown to be aggressive so it sets in an inherent bias that was statistically confirmed to us when we saw that the dragon-type pokemon are indeed amongst the strongest attacking Pokemon.
+
+Fighting: Fighting Pokemon are expected to be physically fit and able to attack inefficient ways so it was of no surprise to us to see these pokemon being up on the top with other strong pokemon. 
+
+Dark: We couldn’t figure out why Dark was statistically stronger than a lot of other types but it was interesting to find this anomaly. Although Dark may not symbolize something similar to the above types, we can still learn from this data as it may show some of the ideas the creators had. They may have just taken liberty and made it among the strong Pokemon for no apparent reason.
+
+### Weaker: 
+
+Bug: Bugs are also depicted as lower creatures and can symbolize weakness, which is evident by many saying such “Squashed like a bug.”  It was seen evidently consistent with the Pokemon type Bug and how weak they were with respect to their attack. 
+
+Normal: We came up with one theory to why these Pokemon could be shown as weaker, in the Pokemon world most of the domesticated Pokemon are normal and kept as pets in some sense instead of being used for battle, so it could be possible that theory has some weight and because of the inactivity this pokemon became weak in terms of attack.
+ 
+Poison & Water: We couldn’t figure out why poison and water was statistically weaker than a lot of other types but it was interesting to find this out. Poison and Water both can be liquids so it is possible that the creators felt that other powers may be more powerful than these. Although there are many reasons that these can be strong powers as well, this could also be one of those examples where the creator just decided to make them weaker powers.
+
+## Defense
+
+```{r}
+def
+```
+
+
+As we can see, the highest defense is shown by Rock, Steel, Ground & Dragon & the lowest defense is shown by Normal, Poison, Bug & Grass.
+
+Justifications
+
+### Sronger: 
+
+Rock: We theorized that the Pokemon creators must have thought that things that seem physically hard, such as Rock & Steel or other things that are tough to break will have a higher defense. 
+
+Steel: As mentioned above Steel could be one of those things that the creator may have felt is a strong substance that cannot easily be broken, therefore it should maintain higher defense stats.
+
+Ground: Ground is an interesting concept since it is one of those features that cannot easily be destroyed. After all it takes a strong earthquake to destroy our Ground. So this is a possible explanation as to why Ground is a good defense type and is amongst the highest defense types.
+
+Dragon: It seems to be a common theme that Dragons are appearing upon the higher levels of all categories. As we discussed previously Dragons are powerful creatures which could be one explanation to this, or it could just be that the creator has a great fascination with Dragons!
+
+### Weaker:
+
+Normal: This one sells itself, in a game with such extraordinary powers who would want to simply have a Normal power. Therefore it seems to make sense that a Normal power simply does not have high defense levels as compared to other more powerful types. 
+
+Poison: Since Poison normally could be regarded as a good defense mechanism, this one is a bit confusing. However, it is possible that since it is not a valiant thing to win by using Poison, it could just mean that since it is more of a weaker move it naturally does not carry as much weight. 
+
+Bug: We previously mentioned how bugs are considered more of a weak creature, after all when you compare them to dragons it makes sense that they may have weaker defense stats to those stronger ones.
+
+Grass: Grass is simply not such a strong thing to use in defense. Although it has some powers in the game it just does not have as much power in comparison to other defenses that can defend attacks in a much better fashion.  
+
+
+## Special Attack
+
+```{r}
+spa
+```
+
+
+Dragon, Fire & Psychics were the strongest and Rock, Ground, Fighting, and Bug were the weakest when it comes to special attack. 
+
+Justifications
+
+### Stronger: 
+
+Dragon: As we discussed previously Dragons are powerful creatures which could be one explanation to this, or it could just be that the creator has a great fascination with Dragons!
+
+Fire: Fire would be a good attack since it should destroy almost everything except water. This is where it was confusing to understand since water should technically be a high defense, but the creator may have added their own spin to this.
+
+Psychics: This makes sense since Psychics can use the mind control to get what they want and attack those others by manipulation.
+
+### Weaker:   
+  
+Rock: Since Rock seems to have a higher defense it could just mean that they also have weaker attacks. After all they do not do much unless they are in large quantities and very heavy.
+
+Ground: It seems to be a common trend that those with higher defense have lower attack. Those concentrated on defense may not have much more powers making them worse at attack.
+
+Fighting: Since Fighting Pokemon have a higher attack it is confusing why they are weaker when considered as a Special Attack type. There may be more powerful types available is one reason we concluded.
+
+Bug: We previously mentioned how bugs are considered more of a weak creature, after all when you compare them to dragons it makes sense that they may have weaker special attack stats to those stronger ones.
+
+## Special Defense
+
+```{r}
+spd
+```
+
+
+Dragon, Fairy, Stell & Psychic were the strongest and Dark, Electric, Ground & Normal  were the weakest when it comes to special defense. 
+
+Justifications
+
+### Stronger: 
+
+Dragon: As we discussed previously Dragons are powerful creatures which could be one explanation to this, or it could just be that the creator has a great fascination with Dragons!
+
+Fairy: Fairies have powers to get what they want which could explain how they can simply use this skill to make them have higher Special Defense.
+
+Stell: Since we do not really have a specific reason or explanation behind this one, it could be a creator's made up skill that they happened to put besides high Special Defense.
+
+Psychic: This makes sense since Psychics can use the mind control to get what they want and attack and also defend those others by manipulation.
+
+### Weaker: 
+
+Dark: Dark only can inhibit eyesight, it really will not defend much else so this one can be seen as weaker to the others.
+
+Electric: This one also appears to be a possible anomaly since Electric could actually have more power and be able to excite the opponents. We were not sure why it was much lower than others.
+
+Ground: Ground was a bit confusing also since it has a higher attack but is not particularly good in terms of Special Attack.
+
+Normal: This one sells itself, in a game with such extraordinary powers who would want to simply have a Normal power. Therefore it seems to make sense that a Normal power simply does not have high defense levels as compared to other more powerful types. 
+
+
+## Speed
+
+```{r}
+spe
+```
+
+
+Flying, Normal & Dragon were the fastest and Rock, Grass and Ground were amongst the slowest: 
+
+Justifications
+
+### Stronger: 
+
+Dragon: As we discussed previously Dragons are powerful creatures which could be one explanation to this, or it could just be that the creator has a great fascination with Dragons!
+
+Normal: After Normal was regarded as more of a weaker type all this time, it appears that Speed happens to be its strong power after all. 
+
+Flying: This makes sense as by flying away Pokemon can adapt high speed compared to those other types.
+
+### Weaker: 
+
+Rock: There really is no speed attached to any of these so it is an easy conclusion as to why these three have low speed skills as opposed to others.
+
+Grass: There really is no speed attached to any of these so it is an easy conclusion as to why these three have low speed skills as opposed to others.
+
+Ground: There really is no speed attached to any of these so it is an easy conclusion as to why these three have low speed skills as opposed to others.
+
 
 ## Sources
 
