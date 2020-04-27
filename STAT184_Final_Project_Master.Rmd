@@ -202,8 +202,6 @@ master
 ```
 
 ```{r}
-# Example of Research Question: How do the average attack stats compare across types?
-
 hp <-
   master %>%
   filter(stat == "HP") %>%
@@ -212,8 +210,6 @@ hp <-
   ggplot(aes(x = type, y = avg_hp, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
@@ -226,8 +222,6 @@ master %>%
   ggplot(aes(x = type, y = avg_attack, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
@@ -240,12 +234,9 @@ def <-
   ggplot(aes(x = type, y = avg_defense, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
-# Example of Research Question: How do the average attack stats compare across types?
 spa <-
   master %>%
   filter(stat == "Special Attack") %>%
@@ -254,12 +245,9 @@ spa <-
   ggplot(aes(x = type, y = avg_special_attack, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
-# Example of Research Question: How do the average attack stats compare across types?
 spd <-
   master %>%
   filter(stat == "Special Defense") %>%
@@ -268,12 +256,9 @@ spd <-
   ggplot(aes(x = type, y = avg_special_defense, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
-# Example of Research Question: How do the average attack stats compare across types?
 spe <-
   master %>%
   filter(stat == "Speed") %>%
@@ -282,8 +267,6 @@ spe <-
   ggplot(aes(x = type, y = avg_speed, fill = slot)) + 
   geom_col() + 
   theme(axis.text.x = element_text(angle = 30, hjust=1))
-
-# As you can see from the chart, Fighting types have the best attack on average across types. I think the "theme" of each type will be present in the stat distributions across type. 
 ```
 
 ```{r}
@@ -488,6 +471,13 @@ Rock: There really is no speed attached to any of these so it is an easy conclus
 Grass: There really is no speed attached to any of these so it is an easy conclusion as to why these three have low speed skills as opposed to others.
 
 Ground: There really is no speed attached to any of these so it is an easy conclusion as to why these three have low speed skills as opposed to others.
+
+## Total Stats
+
+```{r}
+st
+```
+
 
 
 ## Sources
